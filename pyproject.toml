@@ -1,0 +1,11 @@
+[project]
+name = "seedance-playwright"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "loguru>=0.7.2",
+    "fastapi>=0.110.0",
+    "playwright>=1.41.0",
+    "tos>=2.7.0",
+    "uvicorn>=0.29.0",
+]
