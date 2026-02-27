@@ -100,12 +100,35 @@ async def capture() -> dict:
         url = upload_file_to_tos(screenshot_path)
         return {"url": url}
     except FileNotFoundError as exc:
-        raise HTTPException(status_code=400, detail=str(exc)) from exc
+        logger.exception("capture failed: missing file")
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "missing file",
+                "exception": type(exc).__name__,
+                "message": str(exc),
+            },
+        ) from exc
     except ValueError as exc:
-        raise HTTPException(status_code=400, detail=str(exc)) from exc
+        logger.exception("capture failed: invalid config")
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "invalid config",
+                "exception": type(exc).__name__,
+                "message": str(exc),
+            },
+        ) from exc
     except Exception as exc:
-        logger.exception("capture failed")
-        raise HTTPException(status_code=500, detail="capture failed") from exc
+        logger.exception("capture failed: unexpected error")
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "capture failed",
+                "exception": type(exc).__name__,
+                "message": str(exc),
+            },
+        ) from exc
 
 
 if __name__ == "__main__":
